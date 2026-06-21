@@ -13,7 +13,7 @@ Python Full Stack Developer
 -MySQL
 -HTML
 -CSS
-_Bootsrap
+-Bootstrap
 -JavaScript
 
 ##Carrer Goal
