@@ -3,7 +3,7 @@ try:
     conn=mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Aditi9770380",
+        password="your_password",
         database="employee_db",
         port=3306
     )
@@ -19,7 +19,7 @@ def add_employee():
         conn=mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Aditi9770380",
+        password="your_password",
         database="employee_db",
         port=3306
     )
@@ -71,7 +71,7 @@ def view_employee():
         conn=mysql.connector.connect(
         host="localhost",
         user="root",
-        password="Aditi9770380",
+        password="your_password",
         database="employee_db",
         port=3306
     )
@@ -96,7 +96,7 @@ def search_employee():
         conn=mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Aditi9770380",
+            password="your_password",
             database="employee_db",
             port=3306
         )
@@ -123,7 +123,7 @@ def update_employee():
         conn=mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Aditi9770380",
+            password="your_password",
             database="employee_db",
             port=3306
         )
@@ -166,7 +166,7 @@ def delete_employee():
         conn=mysql.connector.connect(
             host="localhost",
             user="root",
-            password="Aditi9770380",
+            password="your_password",
             database="employee_db",
             port=3306
         )
