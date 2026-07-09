@@ -102,3 +102,23 @@ def sort_descending(request):
     employees=Employee.objects.all().order_by('-Name')
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
+@api_view(['POST'])
+def signup_employee(request):
+    serializer=EmployeeSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response({"message":"Employee registerd successfully"},status=status.HTTP_201_CREATED)
+    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def login_employee(request):
+    email=request.data.get('Email')
+    password=request.data.get('Password')
+    try:
+        employee=Employee.objects.get(Email=email,Password=password)
+        return Response({"message":"Login Successfull"},status=status.HTTP_201_CREATED)
+    except Employee.DoesNotExist:
+        return Response({"message":"Invalid email or password"},status=status.HTTP_401_UNAUTHORIZED)
+@api_view(['POST'])
+def logout_employee(request):
+    return Response({"message":"Logout Successfull"},status=status.HTTP_200_OK)

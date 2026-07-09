@@ -3,6 +3,7 @@ class Employee(models.Model):
     Emp_Id=models.IntegerField(primary_key=True)
     Name=models.CharField(max_length=50)
     Email=models.EmailField(unique=True)
+    Password=models.CharField(max_length=30,blank=True)
     Phone_No=models.CharField(max_length=10)
     Address=models.CharField(max_length=50)
     Department=models.CharField(max_length=20)

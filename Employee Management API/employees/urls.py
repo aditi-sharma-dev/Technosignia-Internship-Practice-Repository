@@ -13,4 +13,7 @@ urlpatterns = [
     path('pagination/',views.pagination_employee,name='pagination_employee'),
     path('sort-ascending/',views.sort_ascending,name='sort_ascending'),
     path('sort-descending/',views.sort_descending,name='sort_descending'),
+    path('signup/',views.signup_employee,name='signup_employee'),
+    path('login/',views.login_employee,name='login_employee'),
+    path('logout/',views.logout_employee,name='logout_employee'),
 ]
