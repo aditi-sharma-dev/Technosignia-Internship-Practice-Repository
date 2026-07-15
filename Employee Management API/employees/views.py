@@ -122,3 +122,9 @@ def login_employee(request):
 @api_view(['POST'])
 def logout_employee(request):
     return Response({"message":"Logout Successfull"},status=status.HTTP_200_OK)
+
+def login_page(request):
+    return render(request,"login.html")
+
+def signup_page(request):
+    return render(request,"signup.html")
