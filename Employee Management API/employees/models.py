@@ -1,6 +1,6 @@
 from django.db import models
 class Employee(models.Model):
-    Emp_Id=models.IntegerField(primary_key=True)
+    Emp_Id=models.AutoField(primary_key=True)
     Name=models.CharField(max_length=50)
     Email=models.EmailField(unique=True)
     Password=models.CharField(max_length=30,blank=True)

@@ -128,3 +128,5 @@ def login_page(request):
 
 def signup_page(request):
     return render(request,"signup.html")
+def dashboard(request):
+    return render(request,"dashboard.html")

@@ -16,38 +16,38 @@
             <div class="card shadow p-4">
                 <h2 class="text-center mb-2">Employee Management System</h2>
                 <h2 class="text-center text-muted mb-4">Register</h2>
-                
+                <form id="registerForm">
                 <div class="mb-3">
                     <label class="form-label">Name</label>
-                    <input type="text" class="form-control" placeholder="Enter your name">
+                    <input type="text" name="Name" class="form-control" placeholder="Enter your name">
                 </div>
                     <div class="mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" placeholder="Enter your email">
+                    <input type="email" name="Email" class="form-control" placeholder="Enter your email">
                     </div>
                      <div class="mb-3">
                     <label class="form-label">Phone Number</label>
-                    <input type="number" class="form-control" placeholder="Enter your phone no">
+                    <input type="number" na;me="Phone_No" class="form-control" placeholder="Enter your phone no">
                      </div>
                  <div class="mb-3">
                     <label class="form-label">City</label>
-                    <input type="text" class="form-control" placeholder="Enter your city">
+                    <input type="text" name="City" class="form-control" placeholder="Enter your city">
                  </div>
                  <div class="mb-3">
                     <label class="form-label">Address</label>
-                    <textarea class="form-control" placeholder="Enter your address">
+                    <textarea class="form-control" name="Address" placeholder="Enter your address"></textarea>
                  </div>
                  <div class="mb-3">
                     <label class="form-label">Department</label>
-                    <input type="text" class="form-control" placeholder="Enter your department">
+                    <input type="text" class="form-control"  name="Department" placeholder="Enter your department">
                  </div>
                  <div class="mb-3">
                     <label class="form-label">Designation</label>
-                    <input type="text" class="form-control" placeholder="Enter your designation">
+                    <input type="text" class="form-control"  name="Designation" placeholder="Enter your designation">
                  </div>
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-control" placeholder="Enter your password">
+                    <input type="password" class="form-control"  name="Password" placeholder="Enter your password">
                 </div>
                 <div class="mb-3">
                     <label class="form-label"> Confirm Password</label>
@@ -56,6 +56,7 @@
                 <button type="submit" class="btn btn-primary w-100">
                     Register
                 </button>
+                <form>
                 <p class="text-center mt-3">
                     Already have an account?
                     <a href="login.html">Login</a>
@@ -69,6 +70,43 @@
 
 
 </div>
+<script>
+    const form=document.getElementById("registerForm");
+    form.addEventListener("submit",async function(event){
+        event.preventDefault();
+    const EmployeeData={
+        Name=form.Name.value,
+        Email=form.Email.value,
+        Phone_No=form.Phone_No.value,
+        City=form.City.value,
+        Address=form.Address.value,
+        Department=form.Department.value,
+        Designation=form.Designation.value,
+        Password=form.Password.value,
+
+    };
+    try{
+       const response=await fetch("/employees/signup/",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+           body:JSON.stringify(EmployeeData)
+       });
+       const result=await response.Json();
+       if (response.ok){
+        alert("Resgistration Successfull")
+        form.reset();
+       }else{
+        alert(JSON.stringify(result))
+       }
+       }catch(error){
+        alert("something went wrong")
+        console.log(error)
+    
+       }
+       });
+</script>
 
 </body>
 </html>
