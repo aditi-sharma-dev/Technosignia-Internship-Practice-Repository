@@ -19,7 +19,7 @@ def view_employee(request):
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 @api_view(['GET'])
-def serach_employee(request,Emp_Id):
+def search_employee(request,Emp_Id):
     try:
         employee=Employee.objects.get(Emp_Id=Emp_Id)
         serializer=EmployeeSerializer(employee)
@@ -129,4 +129,10 @@ def login_page(request):
 def signup_page(request):
     return render(request,"signup.html")
 def dashboard(request):
-    return render(request,"dashboard.html")
+    total_employees=Employee.objects.count()
+    context={
+        "total_employees":total_employees,
+         "active_records":total_employees,
+          "recently_added":Employee.objects.order_by("-Emp_Id")[:2].count()
+    }
+    return render(request,"dashboard.html",context)

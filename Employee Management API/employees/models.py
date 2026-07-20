@@ -5,10 +5,12 @@ class Employee(models.Model):
     Email=models.EmailField(unique=True)
     Password=models.CharField(max_length=30,blank=True)
     Phone_No=models.CharField(max_length=10)
+    City=models.CharField(max_length=30)
     Address=models.CharField(max_length=50)
     Department=models.CharField(max_length=20)
     Designation=models.CharField(max_length=20)
-    Salary=models.DecimalField(max_digits=10,decimal_places=2)
+    Salary = models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True)
+    
     
     def __str__(self):
         return self.Name

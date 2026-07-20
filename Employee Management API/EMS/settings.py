@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'EMS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'employee_db',
+        'NAME': 'employee_management_db',
         'USER':'root',
         'PASSWORD':'Aditi9770380',
         'HOST':'localhost',

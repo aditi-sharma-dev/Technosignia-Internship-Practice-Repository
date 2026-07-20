@@ -17,6 +17,7 @@
                 <h2 class="text-center mb-2">Employee Management System</h2>
                 <h2 class="text-center text-muted mb-4">Register</h2>
                 <form id="registerForm">
+                      {% csrf_token %}
                 <div class="mb-3">
                     <label class="form-label">Name</label>
                     <input type="text" name="Name" class="form-control" placeholder="Enter your name">
@@ -27,7 +28,7 @@
                     </div>
                      <div class="mb-3">
                     <label class="form-label">Phone Number</label>
-                    <input type="number" na;me="Phone_No" class="form-control" placeholder="Enter your phone no">
+                    <input type="number" name="Phone_No" class="form-control" placeholder="Enter your phone no">
                      </div>
                  <div class="mb-3">
                     <label class="form-label">City</label>
@@ -56,10 +57,11 @@
                 <button type="submit" class="btn btn-primary w-100">
                     Register
                 </button>
-                <form>
+            </form>
                 <p class="text-center mt-3">
                     Already have an account?
-                    <a href="login.html">Login</a>
+                    <a href="{% url 'login_page'%}">Login</a>
+                
                 </p>
                 
 
@@ -75,25 +77,27 @@
     form.addEventListener("submit",async function(event){
         event.preventDefault();
     const EmployeeData={
-        Name=form.Name.value,
-        Email=form.Email.value,
-        Phone_No=form.Phone_No.value,
-        City=form.City.value,
-        Address=form.Address.value,
-        Department=form.Department.value,
-        Designation=form.Designation.value,
-        Password=form.Password.value,
-
+        Name:form.Name.value,
+        Email:form.Email.value,
+        Phone_No:form.Phone_No.value,
+        City:form.City.value,
+        Address:form.Address.value,
+        Department:form.Department.value,
+        Designation:form.Designation.value,
+        Password:form.Password.value
     };
     try{
+        const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
        const response=await fetch("/employees/signup/",{
         method:"POST",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "X-CSRFToken": csrftoken
+
         },
            body:JSON.stringify(EmployeeData)
        });
-       const result=await response.Json();
+       const result=await response.json();
        if (response.ok){
         alert("Resgistration Successfull")
         form.reset();

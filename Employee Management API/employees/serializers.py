@@ -5,7 +5,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
         model=Employee
         fields="__all__"
     def validate_Email(self,value):
-        if Employee.objects.filter(Email=value).exists:
+        if Employee.objects.filter(Email=value).exists():
             raise serializers.ValidationError("Email already exist")
         return value
     def validate_Phone_No(self,value):
