@@ -5,9 +5,11 @@ class EmployeeSerializer(serializers.ModelSerializer):
         model=Employee
         fields="__all__"
     def validate_Email(self,value):
-        if Employee.objects.filter(Email=value).exists():
+        employee = Employee.objects.filter(Email=value).first()
+        if employee and self.instance != employee:
             raise serializers.ValidationError("Email already exist")
         return value
+   
     def validate_Phone_No(self,value):
         if len(value)!=10:
             raise serializers.ValidationError("Phone no must be 10 digit")

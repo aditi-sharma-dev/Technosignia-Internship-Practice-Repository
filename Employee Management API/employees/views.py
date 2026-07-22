@@ -136,3 +136,16 @@ def dashboard(request):
           "recently_added":Employee.objects.order_by("-Emp_Id")[:2].count()
     }
     return render(request,"dashboard.html",context)
+def add_employee_page(request):
+    return render(request,'add_employee.html')    
+def view_employee_page(request):
+    return render(request,'view_employee.html')  
+def update_employee_page(request,Emp_Id):
+    try:
+        employee=Employee.objects.get(Emp_Id=Emp_Id)
+    except Employee.DoesNotExist:
+             return render(request,'update_employee.html')
+    context={
+        "employee":employee
+    }
+    return render(request,'update_employee.html',context)
