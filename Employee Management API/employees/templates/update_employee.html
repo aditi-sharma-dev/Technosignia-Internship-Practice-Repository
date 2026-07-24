@@ -4,100 +4,227 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Employee</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-5 mb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card shadow p-4">
-                    <h2 class="text-center mb-4">
-                        Update Employee
-                    </h2>
-                    <form id="UpdateEmployeeForm">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" value="{{employee.Name}}" class="form-control" name="Name" placeholder="Enter Employee Name" required> 
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email"  class="form-control" name="Email" value="{{employee.Email}}" placeholder="Enter Email Id" required> 
-                        </div>
-                         <div class="mb-3">
-                            <label class="form-label">Phone Number</label>
-                            <input type="text"  class="form-control" value="{{employee.Phone_No}}" name="Phone_No" placeholder="Enter Phone Number" required> 
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">City</label>
-                            <input type="text"  class="form-control" name="City" value="{{employee.City}}" placeholder="Enter City" required> 
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Address</label>
-                            <textarea class="form-control" rows="3" name="Address" placeholder="Address" required>{{employee.Address}}</textarea> 
-                        </div>
-                         <div class="mb-3">
-                            <label class="form-label">Department</label>
-                            <input type="text"  class="form-control" name="Department" value="{{employee.Department}}" placeholder="Enter Department" required> 
-                        </div>
-                         <div class="mb-3">
-                            <label class="form-label">Designation</label>
-                            <input type="text"  class="form-control" name="Designation" value="{{employee.Designation}}"  placeholder="Enter Designation" required> 
-                        </div>
-                         <div class="mb-3">
-                            <label class="form-label">Salary</label>
-                            <input type="number"  class="form-control" name="Salary"  value="{{employee.Salary}}" placeholder="Enter Salary" required> 
-                        </div>
-                        <button type="submit" class="btn btn-success w-100">
-                            Update  Employee
-                        </button>
 
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-<script>
-    const form=document.getElementById("UpdateEmployeeForm");
-    const employeeId=window.location.pathname.split("/").filter(Boolean).pop();
-    console.log(employeeId);
-     form.addEventListener("submit", async function(event){
-        event.preventDefault();
-        const employeeData={
-            Name:form.Name.value,
-            Email:form.Email.value,
-            Phone_No:form.Phone_No.value,
-            City:form.City.value,
-            Address:form.Address.value,
-            Department:form.Department.value,
-            Designation:form.Designation.value,
-            Salary:form.Salary.value,
-        };
-        const csrftoken=document.querySelector("[name=csrfmiddlewaretoken]").value;
-        try{
-            const response=await fetch(`/employees/update/${employeeId}/`,{
-                method:'PUT',
-                headers:{
-                    "Content-Type":"application/json",
-                    "X-CSRFToken":csrftoken
-                },
-                body:JSON.stringify(employeeData)
+    <style>
+        body{
+          background: linear-gradient(135deg,#e3f2fd,#f8f9fa);
+           min-height:100vh;
+          font-family:Arial,sans-serif;
+         }
+       
 
-            });
-            const result=await response.json();
-            if(response.ok){
-                alert("Employee Update Successfully");
-                window.location.href="/employees/view_employee_page/";
-            }
-            else{
-                alert(JSON.stringify(result));
-            }
-        
-        }catch(error){
-            alert("something went wrong");
-            console.log(error);
+        .card{
+            border: none;
+            border-radius: 20px;
+            max-width: 760px;
+            margin: auto;
         }
-       });
+
+        textarea{
+            resize: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-10">
+
+            <div class="card shadow-lg p-4">
+
+                <h2 class="text-center fw-bold mb-2">
+                    Employee Management System
+                </h2>
+
+                
+
+                <h4 class="text-center fw-semibold mb-4">
+                    Update Employee
+                </h4>
+
+                <form id="UpdateEmployeeForm">
+
+                    {% csrf_token %}
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input type="text"
+                                   class="form-control form-control-lg"
+                                   name="Name"
+                                   value="{{employee.Name}}"
+                                   placeholder="Enter employee name"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email"
+                                   class="form-control form-control-lg"
+                                   name="Email"
+                                   value="{{employee.Email}}"
+                                   placeholder="Enter email address"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Phone Number</label>
+                            <input type="text"
+                                   class="form-control form-control-lg"
+                                   name="Phone_No"
+                                   value="{{employee.Phone_No}}"
+                                   placeholder="Enter phone number"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">City</label>
+                            <input type="text"
+                                   class="form-control form-control-lg"
+                                   name="City"
+                                   value="{{employee.City}}"
+                                   placeholder="Enter city"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Address</label>
+                            <textarea
+                                class="form-control form-control-lg"
+                                rows="2"
+                                name="Address"
+                                placeholder="Enter address"
+                                required>{{employee.Address}}</textarea>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Department</label>
+                            <input type="text"
+                                   class="form-control form-control-lg"
+                                   name="Department"
+                                   value="{{employee.Department}}"
+                                   placeholder="Enter department"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Designation</label>
+                            <input type="text"
+                                   class="form-control form-control-lg"
+                                   name="Designation"
+                                   value="{{employee.Designation}}"
+                                   placeholder="Enter designation"
+                                   required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Salary</label>
+                            <input type="number"
+                                   class="form-control form-control-lg"
+                                   name="Salary"
+                                   value="{{employee.Salary}}"
+                                   placeholder="Enter salary"
+                                   required>
+                        </div>
+
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary btn-lg w-100 py-2">
+                        Update Employee
+                    </button>
+
+                    <p class="text-center mt-3 mb-0">
+                        <a href="/employees/view_employee_page/" class="text-decoration-none">
+                            ← Back to Employee List
+                        </a>
+                    </p>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const form = document.getElementById("UpdateEmployeeForm");
+
+const employeeId = window.location.pathname
+    .split("/")
+    .filter(Boolean)
+    .pop();
+
+form.addEventListener("submit", async function(event){
+
+    event.preventDefault();
+
+    const employeeData = {
+        Name: form.Name.value,
+        Email: form.Email.value,
+        Phone_No: form.Phone_No.value,
+        City: form.City.value,
+        Address: form.Address.value,
+        Department: form.Department.value,
+        Designation: form.Designation.value,
+        Salary: form.Salary.value
+    };
+
+    const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    try{
+
+        const response = await fetch(`/employees/update/${employeeId}/`,{
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json",
+                "X-CSRFToken":csrftoken
+            },
+
+            body:JSON.stringify(employeeData)
+
+        });
+
+        const result = await response.json();
+
+        if(response.ok){
+
+            alert("Employee Updated Successfully");
+
+            setTimeout(()=>{
+                window.location.href="/employees/view_employee_page/";
+            },1000);
+
+        }else{
+
+            alert(JSON.stringify(result));
+
+        }
+
+    }catch(error){
+
+        alert("Something went wrong");
+
+        console.log(error);
+
+    }
+
+});
+
 </script>
+
 </body>
 </html>

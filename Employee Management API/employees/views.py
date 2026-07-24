@@ -116,6 +116,7 @@ def login_employee(request):
     password=request.data.get('Password')
     try:
         employee=Employee.objects.get(Email=email,Password=password)
+        request.session["admin_name"]=employee.Name
         return Response({"message":"Login Successfull"},status=status.HTTP_201_CREATED)
     except Employee.DoesNotExist:
         return Response({"message":"Invalid email or password"},status=status.HTTP_401_UNAUTHORIZED)
@@ -133,7 +134,8 @@ def dashboard(request):
     context={
         "total_employees":total_employees,
          "active_records":total_employees,
-          "recently_added":Employee.objects.order_by("-Emp_Id")[:2].count()
+          "recently_added":Employee.objects.order_by("-Emp_Id")[:2].count(),
+          "admin_name":request.session.get("admin_name")
     }
     return render(request,"dashboard.html",context)
 def add_employee_page(request):
