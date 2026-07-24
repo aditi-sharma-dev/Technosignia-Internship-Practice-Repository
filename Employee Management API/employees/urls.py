@@ -21,5 +21,6 @@ urlpatterns = [
     path('dashboard/',views.dashboard,name="dashboard"),
      path('add_employee_page/',views.add_employee_page,name='add_employee_page'),
     path('view_employee_page/',views.view_employee_page,name='view_employee_page'),
-    path('update_employee_page/<int:Emp_Id>/',views.update_employee_page,name='update_employee_page')
+    path('update_employee_page/<int:Emp_Id>/',views.update_employee_page,name='update_employee_page'),
+    path("filter-status/", views.filter_status,name='filter_status')
 ]

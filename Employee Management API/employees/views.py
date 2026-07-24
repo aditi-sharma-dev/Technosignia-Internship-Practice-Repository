@@ -151,3 +151,13 @@ def update_employee_page(request,Emp_Id):
         "employee":employee
     }
     return render(request,'update_employee.html',context)
+@api_view(['GET'])
+def filter_status(request):
+    status_value=request.GET.get("status")
+    if status_value:
+        employees=Employee.objects.filter(Status=status_value)
+    else:
+        employees=Employee.objects.all()
+    serializer=EmployeeSerializer(employees,many=True)
+    return Response(serializer.data)
+    
