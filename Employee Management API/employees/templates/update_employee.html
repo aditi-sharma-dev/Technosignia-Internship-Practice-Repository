@@ -53,7 +53,16 @@
                     {% csrf_token %}
 
                     <div class="row">
-
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-semibold">Employee ID</label>
+                            <input type="number"
+                             class="form-control"
+                              name="Emp_Id"
+                             value= "{{ employee.Emp_Id }}"
+                           
+                              placeholder="Enter Employee ID"
+                              required>
+                            </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-semibold">Name</label>
                             <input type="text"
@@ -171,6 +180,7 @@ form.addEventListener("submit", async function(event){
     event.preventDefault();
 
     const employeeData = {
+        Emp_Id: form.Emp_Id.value,
         Name: form.Name.value,
         Email: form.Email.value,
         Phone_No: form.Phone_No.value,

@@ -1,5 +1,9 @@
 from django.urls import path
 from . import views 
+from rest_framework_simplejwt.views import(
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 urlpatterns = [
     path('add/',views.add_employee,name='add_employee'),
     path('view/',views.view_employee,name='view_employee'),
@@ -22,5 +26,9 @@ urlpatterns = [
      path('add_employee_page/',views.add_employee_page,name='add_employee_page'),
     path('view_employee_page/',views.view_employee_page,name='view_employee_page'),
     path('update_employee_page/<int:Emp_Id>/',views.update_employee_page,name='update_employee_page'),
-    path("filter-status/", views.filter_status,name='filter_status')
+    path("filter-status/", views.filter_status,name='filter_status'),
+    path('user-dashboard/',views.user_dashboard,name='user_dashboard'),
+    path("token/",TokenObtainPairView.as_view(),name="token_obtain_pair"),
+    path("token/refresh/",TokenRefreshView.as_view(),name="token_refresh"),
+    path("protected/", views.protected_route, name="protected_route"),
 ]

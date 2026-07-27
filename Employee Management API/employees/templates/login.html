@@ -68,7 +68,19 @@
                 <form id="loginForm">
 
                     {% csrf_token %}
+                    <div class="d-flex justify-content-end mb-3">
 
+                      <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="Role" value="Admin" checked>
+                      <label class="form-check-label">Admin</label>
+                      </div>
+
+                      <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="Role"value="User">
+                      <label class="form-check-label">User</label>
+                      </div>
+
+                       </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Email</label>
                         <input type="email"
@@ -84,6 +96,7 @@
                                class="form-control"
                                placeholder="Enter your password">
                     </div>
+             
 
                     <button type="submit" class="btn btn-primary w-100">
                         Sign In
@@ -92,7 +105,7 @@
                 </form>
 
                 <p class="text-center mt-4 mb-0">
-                    Don't have an admin account?
+                    Don't have an  account?
                     <a href="{% url 'signup_page' %}">
                         Create Account
                     </a>
@@ -114,7 +127,8 @@ form.addEventListener("submit",async function(event){
 
     const LoginData={
         Email:form.Email.value,
-        Password:form.Password.value
+        Password:form.Password.value,
+        Role: document.querySelector('input[name="Role"]:checked').value
     };
 
     const csrftoken=document.querySelector("[name=csrfmiddlewaretoken]").value;
@@ -134,7 +148,13 @@ form.addEventListener("submit",async function(event){
 
         if(response.ok){
             alert(result.message);
-            window.location.href="/employees/dashboard/";
+            if (result.role==="Admin"){
+                window.location.href="/employees/dashboard/";
+            }else{
+                window.location.href="/employees/user-dashboard/";
+                
+            }
+            
         }
         else{
             alert(result.message);
