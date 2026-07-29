@@ -192,22 +192,22 @@ form.addEventListener("submit", async function(event){
     };
 
     const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
-
+    const token = localStorage.getItem("access");
     try{
+    const response = await fetch(`/employees/update/${employeeId}/`, {
 
-        const response = await fetch(`/employees/update/${employeeId}/`,{
+    method: "PUT",
 
-            method:"PUT",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "X-CSRFToken": csrftoken
+    },
 
-            headers:{
-                "Content-Type":"application/json",
-                "X-CSRFToken":csrftoken
-            },
+    body: JSON.stringify(employeeData)
 
-            body:JSON.stringify(employeeData)
-
-        });
-
+});
+    
         const result = await response.json();
 
         if(response.ok){

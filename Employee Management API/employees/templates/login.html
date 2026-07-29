@@ -147,6 +147,8 @@ form.addEventListener("submit",async function(event){
         const result=await response.json();
 
         if(response.ok){
+            localStorage.setItem("access", result.access);
+            localStorage.setItem("refresh", result.refresh);
             alert(result.message);
             if (result.role==="Admin"){
                 window.location.href="/employees/dashboard/";

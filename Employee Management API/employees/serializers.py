@@ -3,7 +3,8 @@ from .models import Employee
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model=Employee
-        fields="__all__"
+        exclude = ["user"]
+        
     def validate_Email(self,value):
         employee = Employee.objects.filter(Email=value).first()
         if employee and self.instance != employee:

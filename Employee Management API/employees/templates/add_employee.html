@@ -175,23 +175,23 @@ const employeeData={
     Designation:form.Designation.value,
     Salary:form.Salary.value
 };
-
-const csrftoken=document.querySelector("[name=csrfmiddlewaretoken]").value;
-
+const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+const token = localStorage.getItem("access");
 try{
+const response = await fetch("/employees/add/", {
 
-const response=await fetch("/employees/add/",{
+    method: "POST",
 
-method:"POST",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        "X-CSRFToken": csrftoken
+    },
 
-headers:{
-"Content-Type":"application/json",
-"X-CSRFToken":csrftoken
-},
-
-body:JSON.stringify(employeeData)
+    body: JSON.stringify(employeeData)
 
 });
+
 
 const result=await response.json();
 

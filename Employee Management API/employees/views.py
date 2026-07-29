@@ -8,20 +8,37 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from django.db import transaction
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def add_employee(request):
+    employee = Employee.objects.get(user=request.user)
+    if employee.Role != "Admin":
+       return Response(
+        {"message": "Access Denied"},
+        status=status.HTTP_403_FORBIDDEN
+    )
     serializer=EmployeeSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET'])
-#@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 def view_employee(request):
+    employee = Employee.objects.get(user=request.user)
+    if employee.Role != "Admin":
+      return Response(
+        {"message": "Access Denied"},
+        status=status.HTTP_403_FORBIDDEN
+    )
     employees=Employee.objects.all()
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_employee(request,Emp_Id):
     try:
         employee=Employee.objects.get(Emp_Id=Emp_Id)
@@ -33,7 +50,15 @@ def search_employee(request,Emp_Id):
             status=status.HTTP_404_NOT_FOUND
         )
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_employee(request,Emp_Id):
+    employee = Employee.objects.get(user=request.user)
+
+    if employee.Role != "Admin":
+       return Response(
+        {"message": "Access Denied"},
+        status=status.HTTP_403_FORBIDDEN
+    )
     try:
         employee=Employee.objects.get(Emp_Id=Emp_Id)
     except Employee.DoesNotExist:
@@ -47,7 +72,14 @@ def update_employee(request,Emp_Id):
         return Response(serializer.data)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_employee(request,Emp_Id):
+    employee = Employee.objects.get(user=request.user)
+    if employee.Role != "Admin":
+      return Response(
+        {"message": "Access Denied"},
+        status=status.HTTP_403_FORBIDDEN
+    )
     try:
         employee=Employee.objects.get(Emp_Id=Emp_Id)
     except Employee.DoesNotExist:
@@ -59,6 +91,7 @@ def delete_employee(request,Emp_Id):
     return Response({"message":"Employee delete successfully"},status=status.HTTP_200_OK)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_name(request):
     name=request.GET.get('name')
     employees=Employee.objects.filter(Name__icontains=name)
@@ -66,6 +99,7 @@ def search_name(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_department(request):
     department=request.GET.get('department')
     employees=Employee.objects.filter(Department__icontains=department)
@@ -73,6 +107,7 @@ def search_department(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_email(request):
     email=request.GET.get('email')
     employees=Employee.objects.filter(Email__icontains=email)
@@ -80,12 +115,14 @@ def search_email(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def search_city(request):
     city=request.GET.get('city')
     employees=Employee.objects.filter(City__icontains=city)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def pagination_employee(request):
     employees=Employee.objects.all()
     paginator=PageNumberPagination()
@@ -95,12 +132,14 @@ def pagination_employee(request):
     return paginator.get_paginated_response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def sort_ascending(request):
     employees=Employee.objects.all().order_by('Name')
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def sort_descending(request):
     employees=Employee.objects.all().order_by('-Name')
     serializer=EmployeeSerializer(employees,many=True)
@@ -115,11 +154,19 @@ def signup_employee(request):
 
     serializer=EmployeeSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response({"message":"Employee registerd successfully"},status=status.HTTP_201_CREATED)
+         with transaction.atomic():
+             user=User.objects.create_user(
+                 username=request.data["Email"],
+                 email=request.data["Email"],
+                password=request.data["Password"]
+             )
+             employee=serializer.save()
+             employee.user=user
+             employee.save()
+             return Response({"message":"Employee registerd successfully"},status=status.HTTP_201_CREATED)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-def get_tokens_for_employee(employee):
-    refresh=RefreshToken()
+def get_tokens_for_employee(employee,user):
+    refresh = RefreshToken.for_user(user)
     refresh["Emp_Id"]=employee.Emp_Id
     refresh["Email"]=employee.Email
     refresh["Role"]=employee.Role
@@ -135,15 +182,33 @@ def login_employee(request):
     email=request.data.get('Email')
     password=request.data.get('Password')
     role=request.data.get('Role')
+    user=authenticate(
+        username=email,
+        password=password
+    )
+    
+    if user is None:
+        return Response(
+            {"message": "Invalid email or password"},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
     try:
-        employee=Employee.objects.get(Email=email,Password=password,Role=role)
-        tokens=get_tokens_for_employee(employee)
+        
+        employee=Employee.objects.get(user=user)
+        if employee.Role != role:
+            return Response(
+                {"message": "Invalid role"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+
+        tokens=get_tokens_for_employee(employee,user)
         request.session["admin_name"]=employee.Name
         request.session["role"] = employee.Role
         request.session["employee_id"] = employee.Emp_Id
-        return Response({"message":"Login Successfull","role":employee.Role,"access":tokens["access"],"refresh":tokens["refresh"]},status=status.HTTP_201_CREATED)
+        return Response({"message":"Login Successfull","role":employee.Role,"access":tokens["access"],"refresh":tokens["refresh"]},status=status.HTTP_200_OK)
     except Employee.DoesNotExist:
-        return Response({"message":"Invalid email or password"},status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"message":"Employee profile not found"},status=status.HTTP_404_NOT_FOUND)
 @api_view(['POST'])
 def logout_employee(request):
     request.session.flush()
@@ -183,6 +248,7 @@ def update_employee_page(request,Emp_Id):
     }
     return render(request,'update_employee.html',context)
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def filter_status(request):
     status_value=request.GET.get("status")
     if status_value:

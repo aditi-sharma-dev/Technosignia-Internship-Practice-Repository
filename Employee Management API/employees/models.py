@@ -1,6 +1,16 @@
-from django.db import models  
+from django.db import models 
+from django.contrib.auth.models import User 
 class Employee(models.Model):
+   
     Emp_Id=models.IntegerField(primary_key=True)
+    user = models.OneToOneField(
+    User,
+    on_delete=models.CASCADE,
+    null=True,
+    blank=True
+)
+
+    
     Name=models.CharField(max_length=50)
     Email=models.EmailField(unique=True)
     Password=models.CharField(max_length=30,blank=True)
@@ -24,7 +34,7 @@ class Employee(models.Model):
             ("Admin","Admin"),
             ("User","User"),
         ],
-        default="Admin"
+        default="User"
     )
     
     def __str__(self):

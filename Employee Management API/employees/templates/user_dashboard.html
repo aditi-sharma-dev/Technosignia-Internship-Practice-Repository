@@ -251,16 +251,72 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
 
 <script>
-    const logoutBtn=document.getElementById("logoutBtn")
-    logoutBtn.addEventListener("click",async function(e){
-        e.preventDefault();
-        const response=await fetch("/employees/logout/",{
-            method:"POST"
-        });
-        const result=await response.json();
-        alert(result.message);
-        window.location.href="/employees/login-page/";
+async function checkLogin() {
+
+    const token = localStorage.getItem("access");
+
+    if (!token) {
+        alert("Session Expired. Please Login Again.");
+        window.location.href = "/employees/login-page/";
+        return;
+    }
+
+    const response = await fetch("/employees/protected/", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
     });
+
+    if (!response.ok) {
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+
+        alert("Session Expired. Please Login Again.");
+
+        window.location.href = "/employees/login-page/";
+    }
+}
+
+checkLogin();
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    logoutBtn.addEventListener("click", async function(e) {
+    e.preventDefault();
+
+    try {
+        const refresh = localStorage.getItem("refresh");
+
+        const response = await fetch("/employees/logout/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                refresh: refresh
+            })
+        });
+
+        const result = await response.json();
+
+       
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+
+        alert(result.message);
+
+        window.location.href = "/employees/login-page/";
+
+    } catch (error) {
+        console.log(error);
+
+        
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+
+        window.location.href = "/employees/login-page/";
+    }
+});
+   
 </script>
 </body>
 
