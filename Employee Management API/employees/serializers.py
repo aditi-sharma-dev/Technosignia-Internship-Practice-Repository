@@ -16,6 +16,6 @@ class EmployeeSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Phone no must be 10 digit")
         return value
     def validate_Salary(self,value):
-        if value<=0:
+      if value is not None and value <= 0:
             raise serializers.ValidationError("Salary must be greater than zero")
-        return value
+      return value

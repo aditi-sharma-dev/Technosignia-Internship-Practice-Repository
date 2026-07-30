@@ -3,202 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Register</title>
+    <title>Employee Signup</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
         body{
-            background: linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
-                        url("/static/images/company.jpg");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            font-family: Arial, sans-serif;
-        }
+    background:
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+        url("/static/images/company.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+}
+   
 
-        .card{
-            max-width: 500px;
-            margin: auto;
-            border-radius: 15px;
-        }
+.container{
+    padding-top:10px !important;
+    padding-bottom:10px !important;
+}
+
+
+.card{
+    border:none;
+    border-radius:15px;
+    max-width:620px;
+    margin:auto;
+    padding:15px !important;
+    background:rgba(255,255,255,0.95);
+   
+}
+
+
+h2{
+    font-size:22px;
+    margin-bottom:5px !important;
+}
+
+h4{
+    font-size:18px;
+    margin-bottom:12px !important;
+}
+
+.form-label{
+    font-size:13px;
+    margin-bottom:2px;
+}
+
+.form-control{
+    height:32px;
+    padding:4px 8px;
+    font-size:13px;
+}
+
+textarea.form-control{
+    height:45px;
+}
+
+.mb-3{
+    margin-bottom:6px !important;
+}
+
+.form-check{
+    font-size:13px;
+}
+
+.btn{
+    padding:6px !important;
+    font-size:14px;
+}
+        
     </style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="container ">
 
-    <div class="row justify-content-center align-items-center py-5">
+<div class="row justify-content-center">
 
-        <div class="col-lg-5 col-md-6 col-sm-8 col-11">
+<div class="col-lg-10">
 
-            <div class="card border-0 shadow-lg p-3">
+<div class="card shadow-lg p-2" style="background:white;">
 
-                <h3 class="text-center fw-bold mb-1">
-                    Employee Management System
-                </h3>
+<h2 class="text-center fw-bold mb-2">
+    Employee Management System
+</h2>
 
+<h4 class="text-center fw-semibold mb-4">
+    Signup
+</h4>
 
-                <h5 class="text-center fw-semibold mb-3">
-                   Signup
-                </h5>
+<form id="registerForm">
 
-                <form id="registerForm">
-
-                    {% csrf_token %}
-                   <div class="d-flex justify-content-end mb-3">
-
-                     <div>
-                        {% if not admin_exists %}
-
-                        <div class="form-check form-check-inline">
-                         <input class="form-check-input"
-                         type="radio"
-                         name="Role"
-                         value="Admin"
-                         checked>
-
-                        <label class="form-check-label">Admin</label>
-                        </div>
-                        {% endif %}
-                     <div class="form-check form-check-inline">
-                       <input class="form-check-input"
-                       type="radio"
-                       name="Role"
-                       value="User"
-                       {% if admin_exists %}checked{% endif %}>
+{% csrf_token %}
 
 
-                      <label class="form-check-label">User</label>
-                     </div>
-                     </div>
-                    </div>
 
-                    <div class="mb-2">
-                       <label class="form-label fw-semibold">
-                        Employee ID
-                    </label>
-                    <input type="number" name="Emp_Id" class="form-control" placeholder="Enter Employee ID">
-                   </div>
-                      <div class="mb-2">
-                        <label class="form-label fw-semibold">Name</label>
-                        <input
-                            type="text"
-                            name="Name"
-                            class="form-control"
-                            placeholder="Enter your name">
-                    </div>
+<div class="d-flex justify-content-end mb-2">
 
-                    <div class="mb-2">
-                        <label class="form-label fw-semibold">Email</label>
-                        <input
-                            type="email"
-                            name="Email"
-                            class="form-control"
-                            placeholder="Enter your email address">
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="form-label fw-semibold">Password</label>
-                        <input
-                            type="password"
-                            name="Password"
-                            class="form-control"
-                            placeholder="Create a password">
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">
-                            Confirm Password
-                        </label>
-
-                        <input
-                            type="password"
-                            name="ConfirmPassword"
-                            class="form-control"
-                            placeholder="Confirm your password">
-                    </div>
-                  
-
-                    <button
-                        type="submit"
-                        class="btn btn-primary w-100">
-                        Register
-                    </button>
-
-                </form>
-
-                <p class="text-center mt-3 mb-0">
-                    Already have  an account?
-                    <a href="{% url 'login_page' %}" class="text-decoration-none">
-                        Sign In
-                    </a>
-                </p>
-
-            </div>
-
-        </div>
-
+    {% if not admin_exists %}
+    <div class="form-check form-check-inline">
+        <input class="form-check-input"
+               type="radio"
+               name="Role"
+               value="Admin"
+               checked>
+        <label class="form-check-label">Admin</label>
     </div>
+    {% endif %}
+
+    <div class="form-check form-check-inline">
+        <input class="form-check-input"
+               type="radio"
+               name="Role"
+               value="User"
+               {% if admin_exists %}checked{% endif %}>
+        <label class="form-check-label">User</label>
+    </div>
+
+</div>
+
+<div class="row g-1">
+
+ 
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Employee ID</label>
+<input type="number"
+class="form-control"
+name="Emp_Id"
+placeholder="Enter Employee ID"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Name</label>
+<input type="text"
+class="form-control"
+name="Name"
+placeholder="Enter Full Name"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Email</label>
+<input type="email"
+class="form-control"
+name="Email"
+placeholder="Enter Email Address"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Phone Number</label>
+<input type="text"
+class="form-control"
+name="Phone_No"
+placeholder="Enter Phone Number"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Password</label>
+<input type="password"
+class="form-control"
+name="Password"
+placeholder="Create Password"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Confirm Password</label>
+<input type="password"
+class="form-control"
+name="ConfirmPassword"
+placeholder="Confirm Password"
+required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">City</label>
+<input type="text"
+class="form-control"
+name="City"
+placeholder="Enter City"
+required>
+</div>
+<div class="col-6 mb-3">
+    <label class="form-label fw-semibold">Address</label>
+    <textarea
+        class="form-control"
+        rows="2"
+        name="Address"
+        placeholder="Enter Address"
+        required></textarea>
+</div>
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Department</label>
+<input type="text"
+class="form-control"
+name="Department"
+placeholder="Enter Department"
+>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label fw-semibold">Designation</label>
+<input type="text"
+class="form-control"
+name="Designation"
+placeholder="Enter Designation"
+>
+</div>
+
+
+</div>
+<button
+type="submit"
+class="btn btn-primary w-100 py-2">
+Register
+</button>
+
+
+<p class="text-center mt-3 mb-0">
+Already have an account?
+<a href="{% url 'login_page' %}" class="text-decoration-none">
+Sign In
+</a>
+</p>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
 
 </div>
 
 <script>
 
-const form = document.getElementById("registerForm");
+const form=document.getElementById("registerForm");
 
-form.addEventListener("submit", async function(event){
+form.addEventListener("submit",async function(event){
 
-    event.preventDefault();
+event.preventDefault();
 
-    if(form.Password.value !== form.ConfirmPassword.value){
-        alert("Passwords do not match");
-        return;
-    }
-    
+if(form.Password.value!==form.ConfirmPassword.value){
+alert("Passwords do not match");
+return;
+}
 
-    const EmployeeData = {
-        Emp_Id: form.Emp_Id.value,
-        Name: form.Name.value,
-        Email: form.Email.value,
-        Password: form.Password.value,
-        Role: document.querySelector('input[name="Role"]:checked').value
-    };
+const EmployeeData={
 
-    try{
+Emp_Id:form.Emp_Id.value,
+Name:form.Name.value,
+Email:form.Email.value,
+Password:form.Password.value,
+Phone_No:form.Phone_No.value,
+City:form.City.value,
+Address:form.Address.value,
+Department:form.Department.value,
+Designation:form.Designation.value,
+Role:document.querySelector('input[name="Role"]:checked').value
 
-        const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+};
 
-        const response = await fetch("/employees/signup/",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json",
-                "X-CSRFToken":csrftoken
-            },
-            body:JSON.stringify(EmployeeData)
-        });
+try{
 
-        const result = await response.json();
+const csrftoken=document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-        if(response.ok){
-            alert("Registration Successful");
-            window.location.href="/employees/login-page/";
-        }
-        else{
-            alert(JSON.stringify(result));
-        }
+const response=await fetch("/employees/signup/",{
 
-    }
-    catch(error){
-        console.log(error);
-        alert("Something went wrong");
-    }
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"X-CSRFToken":csrftoken
+},
+
+body:JSON.stringify(EmployeeData)
+
+});
+
+const result=await response.json();
+
+if(response.ok){
+
+alert("Registration Successful");
+
+window.location.href="/employees/login-page/";
+
+}
+else{
+
+alert(JSON.stringify(result));
+
+}
+
+}catch(error){
+
+console.log(error);
+
+alert("Something went wrong");
+
+}
 
 });
 
 </script>
 
 </body>
-</html>
+</html> 
+
+
+
+

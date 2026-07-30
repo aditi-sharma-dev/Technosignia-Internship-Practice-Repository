@@ -22,9 +22,22 @@ def add_employee(request):
     )
     serializer=EmployeeSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data,status=status.HTTP_201_CREATED)
-    return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+
+            user = User.objects.create_user(
+                username=request.data["Email"],
+                email=request.data["Email"],
+                password=request.data["Password"]
+            )
+
+            employee = serializer.save()
+            employee.user = user
+            employee.save()
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def view_employee(request):
@@ -126,7 +139,7 @@ def search_city(request):
 def pagination_employee(request):
     employees=Employee.objects.all()
     paginator=PageNumberPagination()
-    paginator.page_size=3
+    paginator.page_size=8
     result=paginator.paginate_queryset(employees,request)
     serializer=EmployeeSerializer(result,many=True)
     return paginator.get_paginated_response(serializer.data)
