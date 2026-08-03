@@ -11,6 +11,7 @@ from rest_framework.decorators import permission_classes
 from django.db import transaction
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_employee(request):
@@ -287,3 +288,72 @@ def protected_route(request):
         "message": "JWT Token Verified Successfully"
     })
     
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def view_profile(request):
+    try:
+        employee=Employee.objects.get(user=request.user)
+        serializer=EmployeeSerializer(employee)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    except Employee.DoesNotExist:
+        return Response({"message":"Profile not found"},status=status.HTTP_404_NOT_FOUND)
+def profile_page(request):
+    return render(request,'profile.html')
+def user_profile_page(request):
+    return render(request, "user_profile.html")
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    employee=Employee.objects.get(user=request.user)
+    serializer=EmployeeSerializer(employee,data=request.data,partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors,status=400)
+def update_profile_page(request):
+    return render(request, "update_profile.html")
+def user_update_profile_page(request):
+    return render(request, "user_update_profile.html")
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    employee=Employee .objects.get(user=request.user)
+    if "Profile_Photo" not in request.FILES:
+        return Response(
+            {"message": "No image selected"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    employee.Profile_Photo=request.FILES["Profile_Photo"]
+    employee.save()
+    serializer=EmployeeSerializer(employee)
+    return Response(serializer.data)
+
+@api_view(["PUT"])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    old_password=request.data.get("old_password")
+    new_password=request.data.get("new_password")
+    confirm_password=request.data.get("confirm_password")
+    if not old_password or not new_password or not confirm_password:
+        return Response({"message":"All fileds are required"},status=status.HTTP_400_BAD_REQUEST)
+    if new_password!=confirm_password:
+        return Response({"message":"New password and confirm password do not match"},status=status.HTTP_400_BAD_REQUEST)
+    user=request.user
+    if not user.check_password(old_password):
+        return Response({"message":"Old password is incorrect"}, status=status.HTTP_100_CONTINUE)
+    user.set_password(new_password)
+    user.save()
+    return Response(
+        {"message": "Password changed successfully"},
+        status=status.HTTP_200_OK
+    )
+
+
+            
+
+def change_password_page(request):
+    return render(request, "change_password.html")
+def user_change_password_page(request):
+    return render(request, "user_change_password.html")

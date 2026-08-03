@@ -36,6 +36,7 @@ class Employee(models.Model):
         ],
         default="User"
     )
+    Profile_Photo=models.ImageField(upload_to='profile_photos/',blank=True,null=True, default="profile_photos/default.jpg")
     
     def __str__(self):
         return self.Name

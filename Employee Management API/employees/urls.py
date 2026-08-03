@@ -31,4 +31,13 @@ urlpatterns = [
     path("token/",TokenObtainPairView.as_view(),name="token_obtain_pair"),
     path("token/refresh/",TokenRefreshView.as_view(),name="token_refresh"),
     path("protected/", views.protected_route, name="protected_route"),
+    path("profile/",views.view_profile,name="view_profile"),
+    path("profile-page/", views.profile_page, name="profile_page"),
+    path("user-profile-page/", views.user_profile_page, name="user_profile_page"),
+    path("update-profile/",views.update_profile,name="update_profile"),
+    path("update-profile-page/", views.update_profile_page, name="update_profile_page"),
+    path("user-update-profile-page/",views.user_update_profile_page,name="user_update_profile_page"),
+    path("change-password/",views.change_password,name="change_password"),
+    path("change-password-page/",views.change_password_page,name="change_password_page"),
+    path("user-change-password-page/",views.user_change_password_page,name="user_change_password_page"),
 ]
