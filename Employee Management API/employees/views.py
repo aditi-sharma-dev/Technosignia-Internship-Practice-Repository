@@ -12,6 +12,9 @@ from django.db import transaction
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
+from django.core.mail import send_mail
+from django.conf import settings
+import random
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_employee(request):
@@ -357,3 +360,70 @@ def change_password_page(request):
     return render(request, "change_password.html")
 def user_change_password_page(request):
     return render(request, "user_change_password.html")
+def forgot_password_page(request):
+    return render(request, "forgot_password.html")
+@api_view(["POST"])
+def forgot_password(request):
+    email=request.data.get("Email")
+    if not email:
+        return Response({"message":"Email is required"},status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        employee=Employee.objects.get(Email=email)
+    except Employee.DoesNotExist:
+        return Response({"message":"Employee not found"},status=status.HTTP_400_BAD_REQUEST)
+    otp=random.randint(100000,999999)
+    employee.OTP=str(otp)
+    employee.save()
+    
+    send_mail(
+        subject="Password Reset OTP",
+        message=f"Your OTP is: {otp}",
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email],
+        fail_silently=False,
+    )
+
+    return Response(
+        {"message": "OTP sent successfully"},
+        status=status.HTTP_200_OK
+    )
+@api_view(["POST"])
+def verify_otp(request):
+    email=request.data.get("Email")
+    otp=request.data.get("OTP")
+    if not email or not otp:
+        return Response({"message":"Email and OTP are required"},status=status.HTTP_400_BAD_REQUEST)
+    try:
+        employee=Employee.objects.get(Email=email)
+    except Employee.DoesNotExist:
+        return Response({"message":"Employee not found"},status=status.HTTP_400_BAD_REQUEST)
+    if employee.OTP!=otp:
+        return Response({"message":"Invalid OTP"},status=status.HTTP_400_BAD_REQUEST)
+    return Response({"message":"OTP verified successfully"},status=status.HTTP_200_OK)
+def verify_otp_page(request):
+    return render(request, "verify_otp.html")
+@api_view(["POST"])
+def reset_password(request):
+    email=request.data.get("Email")
+    otp=request.data.get("OTP")
+    new_password=request.data.get("new_password")
+    confirm_password=request.data.get("confirm_password")
+    if not email or not otp or not new_password or not confirm_password:
+           return Response({"message":"All fields are required"},status=status.HTTP_400_BAD_REQUEST)
+   
+    if new_password!=confirm_password:
+        return Response({"message":"Password do not match"},status=status.HTTP_400_BAD_REQUEST)
+    try:
+        employee=Employee.objects.get(Email=email,OTP=otp)
+    except Employee.DoesNotExist:
+        return Response({"message":"Invalid email or OTP"},status=status.HTTP_400_BAD_REQUEST)
+    user=employee.user
+    user.set_password(new_password)
+    user.save()
+    
+    employee.OTP=""
+    employee.save()
+    return Response({"message":"Password reset successfully"},status=status.HTTP_200_OK)
+def reset_password_page(request):
+    return render(request, "reset_password.html")

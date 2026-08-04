@@ -37,6 +37,8 @@ class Employee(models.Model):
         default="User"
     )
     Profile_Photo=models.ImageField(upload_to='profile_photos/',blank=True,null=True, default="profile_photos/default.jpg")
+    OTP=models.CharField(max_length=6,blank=True,default=True)
+    OTP_Created_At=models.DateTimeField(blank=True,null=True)
     
     def __str__(self):
         return self.Name
