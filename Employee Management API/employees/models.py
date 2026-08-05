@@ -40,6 +40,7 @@ class Employee(models.Model):
     OTP=models.CharField(max_length=6,blank=True,default=True)
     OTP_Created_At=models.DateTimeField(blank=True,null=True)
     
+    isDeleted=models.BooleanField(default=False)
     def __str__(self):
         return self.Name
 

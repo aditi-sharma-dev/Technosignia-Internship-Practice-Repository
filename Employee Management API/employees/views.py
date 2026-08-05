@@ -51,14 +51,14 @@ def view_employee(request):
         {"message": "Access Denied"},
         status=status.HTTP_403_FORBIDDEN
     )
-    employees=Employee.objects.all()
+    employees=Employee.objects.filter(isDeleted=False)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search_employee(request,Emp_Id):
     try:
-        employee=Employee.objects.get(Emp_Id=Emp_Id)
+        employee=Employee.objects.get(Emp_Id=Emp_Id,isDeleted=False)
         serializer=EmployeeSerializer(employee)
         return Response(serializer.data)
     except Employee.DoesNotExist:
@@ -77,7 +77,7 @@ def update_employee(request,Emp_Id):
         status=status.HTTP_403_FORBIDDEN
     )
     try:
-        employee=Employee.objects.get(Emp_Id=Emp_Id)
+        employee=Employee.objects.get(Emp_Id=Emp_Id,isDeleted=False)
     except Employee.DoesNotExist:
         return Response(
             {"message":"Employee Not Found"},
@@ -104,14 +104,16 @@ def delete_employee(request,Emp_Id):
             {"message":"Employee Not Found"},
             status=status.HTTP_404_NOT_FOUND
         )
-    employee.delete()
+    employee.isDeleted=True
+    employee.Status="Inactive"
+    employee.save()
     return Response({"message":"Employee delete successfully"},status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search_name(request):
     name=request.GET.get('name')
-    employees=Employee.objects.filter(Name__icontains=name)
+    employees=Employee.objects.filter(Name__icontains=name,isDeleted=False)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 
@@ -119,7 +121,7 @@ def search_name(request):
 @permission_classes([IsAuthenticated])
 def search_department(request):
     department=request.GET.get('department')
-    employees=Employee.objects.filter(Department__icontains=department)
+    employees=Employee.objects.filter(Department__icontains=department,isDeleted=False)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 
@@ -127,7 +129,7 @@ def search_department(request):
 @permission_classes([IsAuthenticated])
 def search_email(request):
     email=request.GET.get('email')
-    employees=Employee.objects.filter(Email__icontains=email)
+    employees=Employee.objects.filter(Email__icontains=email,isDeleted=False)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 
@@ -135,13 +137,13 @@ def search_email(request):
 @permission_classes([IsAuthenticated])
 def search_city(request):
     city=request.GET.get('city')
-    employees=Employee.objects.filter(City__icontains=city)
+    employees=Employee.objects.filter(City__icontains=city,isDeleted=False)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def pagination_employee(request):
-    employees=Employee.objects.all()
+    employees=Employee.objects.filter(isDeleted=False)
     paginator=PageNumberPagination()
     paginator.page_size=8
     result=paginator.paginate_queryset(employees,request)
@@ -151,16 +153,27 @@ def pagination_employee(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def sort_ascending(request):
-    employees=Employee.objects.all().order_by('Name')
+    employees=Employee.objects.filter(isDeleted=False).order_by('Name')
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def sort_descending(request):
-    employees=Employee.objects.all().order_by('-Name')
+    employees=Employee.objects.filter(isDeleted=False).order_by('-Name')
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def recently_added(request):
+
+    employees = Employee.objects.filter(isDeleted=False).order_by("-Emp_Id")[:5]
+
+    serializer = EmployeeSerializer(employees, many=True)
+
+    return Response(serializer.data)
+
 @api_view(['POST'])
 def signup_employee(request):
     if request.data.get("Role")=="Admin" and Employee.objects.filter(Role="Admin").exists():
@@ -243,11 +256,11 @@ def signup_page(request):
 def dashboard(request):
     if "admin_name" not in request.session:
         return redirect("login_page")
-    total_employees=Employee.objects.count()
+    total_employees=Employee.objects.filter(isDeleted=False).count()
     context={
         "total_employees":total_employees,
-         "active_records":total_employees,
-          "recently_added":Employee.objects.order_by("-Emp_Id")[:2].count(),
+         "active_records":Employee.objects.filter(Status="Active",isDeleted=False).count(),
+          "recently_added":Employee.objects.filter(isDeleted=False).order_by("-Emp_Id")[:5].count(),
           "admin_name":request.session.get("admin_name")
     }
     return render(request,"dashboard.html",context)
@@ -269,9 +282,9 @@ def update_employee_page(request,Emp_Id):
 def filter_status(request):
     status_value=request.GET.get("status")
     if status_value:
-        employees=Employee.objects.filter(Status=status_value)
+        employees=Employee.objects.filter(Status=status_value,isDeleted=False)
     else:
-        employees=Employee.objects.all()
+        employees=Employee.objects.filter(isDeleted=False)
     serializer=EmployeeSerializer(employees,many=True)
     return Response(serializer.data)
 def user_dashboard(request):
