@@ -84,18 +84,32 @@
         </div>
         <div class="card shadow-lg p-4 mt-4">
             <div class="text-center mb-4">
-                <img id="profilePhoto" src="/static/images/default.jpg" class="rounded-circle border border-3" width="150" height="150">
-                <div class="mt-3">
-                     <input type="file" id="profilePhotoInput" class="form-control">
-                       </div>
-                <div class="mb-3">
-                 <label class="fw-bold">Name</label>
-                  <input type="text" id="name" class="form-control">
-                </div>
-                
-                <span class="badge bg-primary px-3 py-2" id="role"></span>
-            </div>
-            <hr>
+
+    <img id="profilePhoto"
+         src="/static/images/default.jpg"
+         class="rounded-circle border border-3 border-primary shadow"
+         width="130"
+         height="130">
+
+    <div class="mt-3">
+        <input type="file"
+               id="profilePhotoInput"
+               class="form-control w-50 mx-auto">
+    </div>
+
+    <div class="mt-3 w-50 mx-auto">
+        <label class="fw-bold mb-2">Full Name</label>
+        <input type="text"
+               id="name"
+               class="form-control">
+    </div>
+
+    <span class="badge bg-primary px-4 py-2 fs-6 mt-3"
+          id="role">
+    </span>
+
+</div>
+
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="fw-bold">Employee Id</label>

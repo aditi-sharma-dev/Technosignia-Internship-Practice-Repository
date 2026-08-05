@@ -80,7 +80,7 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
                       <li class="nav-item">
                         <a href="{% url 'user_profile_page' %}" class="nav-link ">
                        <i class="bi bi-people-fill me-2"></i>
-                         MY Profile
+                         My Profile
                     </a>
                      </l>
                     <li class="nav-item mt-5">
@@ -175,17 +175,26 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
     </div>
 </div>
-
 <div class="col-md-12">
-    <div class="card quick-card shadow-sm h-100" id="myProfile">
+    <div class="card quick-card shadow-sm h-100">
 
         <div class="card-body">
 
-            <h5 class="fw-bold mb-4">
-                My Profile
-            </h5>
+            <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <table class="table table-borderless">
+                <h5 class="fw-bold mb-0">
+                    <i class="bi bi-speedometer2 text-primary me-2"></i>
+                    Dashboard Overview
+                </h5>
+
+                <a href="{% url 'user_profile_page' %}" class="btn btn-primary btn-sm">
+                    <i class="bi bi-person-circle me-1"></i>
+                    View Profile
+                </a>
+
+            </div>
+
+            <table class="table table-borderless mb-0">
 
                 <tr>
                     <td><strong>Name</strong></td>
@@ -195,30 +204,6 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
                 <tr>
                     <td><strong>Email</strong></td>
                     <td>{{employee.Email}}</td>
-                </tr>
-
-                <tr>
-                    <td><strong>Phone</strong></td>
-                    <td>{{employee.Phone_No}}</td>
-                </tr>
-
-                <tr>
-                    <td><strong>City</strong></td>
-                    <td>{{employee.City}}</td>
-                </tr>
-
-                <tr>
-                    <td><strong>Department</strong></td>
-                    <td>{{employee.Department}}</td>
-                </tr>
-
-                <tr>
-                    <td><strong>Designation</strong></td>
-                    <td>{{employee.Designation}}</td>
-                </tr>
-                <tr>
-                    <td><strong>Salary</strong></td>
-                    <td>{{employee.Salary}}</td>
                 </tr>
 
                 <tr>
@@ -245,6 +230,8 @@ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.m
 
     </div>
 </div>
+
+
 <div class="text-center mt-5 mb-3">
     <p class="text-muted">
         © 2026 Employee Management System

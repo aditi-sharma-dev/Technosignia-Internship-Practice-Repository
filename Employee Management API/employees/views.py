@@ -257,11 +257,16 @@ def dashboard(request):
     if "admin_name" not in request.session:
         return redirect("login_page")
     total_employees=Employee.objects.filter(isDeleted=False).count()
+    admin = Employee.objects.get(Emp_Id=request.session["employee_id"])
+
     context={
         "total_employees":total_employees,
          "active_records":Employee.objects.filter(Status="Active",isDeleted=False).count(),
           "recently_added":Employee.objects.filter(isDeleted=False).order_by("-Emp_Id")[:5].count(),
-          "admin_name":request.session.get("admin_name")
+              "admin_name": admin.Name,
+
+          "profile_photo": admin.Profile_Photo.url,
+
     }
     return render(request,"dashboard.html",context)
 def add_employee_page(request):

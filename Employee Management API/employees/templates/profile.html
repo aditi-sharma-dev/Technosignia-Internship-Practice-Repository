@@ -70,12 +70,7 @@
                         </a>
                     </li>
                     
-                    <li class="nav-item">
-                        <a href="{% url 'profile_page' %}" class="nav-link active">
-                       <i class="bi bi-person-circle me-2"></i>
-                        Profile
-                    </a>
-                    </li>
+                  
                        
                     <li class="nav-item mt-5">
                         <a href="#" id="logoutBtn" class="nav-link text-warning">
@@ -93,64 +88,104 @@
                 <p class="text-primary fw-semibold mb-0 mt-1">Employee Management System</p>
             </div>
         </div>
-        <div class="card shadow-lg p-4 mt-4">
-            <div class="text-center mb-4">
-                <img id="profilePhoto" src="/static/images/default.jpg" class="rounded-circle border border-3" width="150" height="150">
-                <h3 class="fw-bold mt-3" id="name"></h3>
-                <span class="badge bg-primary px-3 py-2" id="role"></span>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Employee Id</label>
-                        <input type="text" id="Emp_Id" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Email</label>
-                        <input type="email" id="email" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Phone</label>
-                        <input type="text" id="phone" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">City</label>
-                        <input type="text" id="city" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Address</label>
-                        <textarea  id="address"  rows="2" class="form-control" readonly></textarea>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Department</label>
-                        <input type="text" id="department" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Designation</label>
-                        <input type="text" id="designation" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Salary</label>
-                        <input type="text" id="salary" class="form-control" readonly>
-                </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="fw-bold">Status</label>
-                        <input type="text" id="status" class="form-control" readonly>
-                </div>
-            </div>
-            <div class="text-center mt-3">
-                <a href="/employees/update-profile-page/" class="btn btn-primary px-4">
-                    <i class="bi bi-pencil-square me-2"></i>
-                    Update Profile
-                </a>
-                <a href="/employees/change-password-page/" class="btn btn-warning px-4 ms-2">
-                    <i class="bi bi-key-fill me-2"></i>
-                    Change Password
-                </a>
+        <div class="card shadow-lg p-3 mt-3">
+
+        
+
+<div class="text-center mb-4">
+    <img id="profilePhoto"
+         src="/static/images/default.jpg"
+         class="rounded-circle border border-3 border-primary shadow"
+         width="130"
+         height="130">
+
+
+    <h2 class="fw-bold mt-2 mb-1" id="name"></h2>
+
+    <span class="badge bg-primary px-4 py-2 fs-6" id="role"></span>
+
+
+
+
+ 
+</div>
+
+<hr class="my-4">
+
+<h4 class="fw-bold text-primary mb-3">
+    Employee Information
+</h4>
+
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Employee ID</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary" id="Emp_Id"></p>
+    </div>
+    <div class="col-md-6 mb-3">
+    <h6 class="fw-bold text-dark mb-1">Email</h6>
+    <p class="fs-5 fw-normal mb-0 text-secondary" id="email"></p>
+</div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Phone Number</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary" id="phone"></p>
+    </div>
+
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Department</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary" id="department"></p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Designation</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary" id="designation"></p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">City</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary" id="city"></p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Salary</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary" id="salary"></p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Status</h6>
+        <span id="status" class="badge bg-success fs-6 px-3 py-2"></span>
+    </div>
+
+    <div class="col-12 mb-3">
+        <h6 class="fw-bold text-dark mb-1">Address</h6>
+        <p class="fs-5 fw-normal mb-0 text-secondary"id="address"></p>
+    </div>
 
 </div>
- </div>
+
+<hr class="my-4">
+
+<div class="text-center">
+
+    <a href="/employees/update-profile-page/" class="btn btn-primary px-4 me-3">
+        <i class="bi bi-pencil-square me-2"></i>
+        Update Profile
+    </a>
+
+    <a href="/employees/change-password-page/" class="btn btn-warning px-4">
+        <i class="bi bi-key-fill me-2"></i>
+        Change Password
+    </a>
+
 </div>
+</div>  
+
+</div>   
+</div>  
+
+</div>   
 
     <script>
         const token=localStorage.getItem("access");
@@ -169,19 +204,19 @@
             } else {
             document.getElementById("profilePhoto").src = "/static/images/default.jpg";
            }
-           
-            document.getElementById("name").innerText=data.Name;
-            document.getElementById("role").innerText=data.Role;
-            document.getElementById("Emp_Id").value=data.Emp_Id;
-            document.getElementById("email").value=data.Email;
-            document.getElementById("phone").value=data.Phone_No;
-            document.getElementById("city").value=data.City;
-            document.getElementById("department").value=data.Department;
-            document.getElementById("designation").value=data.Designation;
-            document.getElementById("salary").value=data.Salary;
-            document.getElementById("status").value=data.Status;
-            document.getElementById("address").value=data.Address;
+           document.getElementById("name").innerText = data.Name;
+document.getElementById("role").innerText = data.Role;
+document.getElementById("email").innerText = data.Email;
 
+document.getElementById("Emp_Id").innerText = data.Emp_Id;
+document.getElementById("phone").innerText = data.Phone_No;
+document.getElementById("city").innerText = data.City;
+document.getElementById("department").innerText = data.Department;
+document.getElementById("designation").innerText = data.Designation;
+document.getElementById("salary").innerText = "₹ " + data.Salary;
+document.getElementById("status").innerText = data.Status;
+document.getElementById("address").innerText = data.Address;
+            
         })
     .catch(error => {
     console.error(error);
