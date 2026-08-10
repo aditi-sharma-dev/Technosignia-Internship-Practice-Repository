@@ -110,61 +110,38 @@
  
 </div>
 
+
 <hr class="my-4">
 
+
 <h4 class="fw-bold text-primary mb-3">
-    Employee Information
+    Admin Information
 </h4>
 
 <div class="row">
 
     <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Employee ID</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="Emp_Id"></p>
+        <h6 class="fw-bold">Name</h6>
+        <p class="fs-5 text-secondary mb-0" id="infoName"></p>
     </div>
+
     <div class="col-md-6 mb-3">
-    <h6 class="fw-bold text-dark mb-1">Email</h6>
-    <p class="fs-5 fw-normal mb-0 text-secondary" id="email"></p>
+        <h6 class="fw-bold">Role</h6>
+        <p class="fs-5 text-secondary mb-0" id="infoRole"></p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold">Email</h6>
+        <p class="fs-5 text-secondary mb-0" id="email"></p>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <h6 class="fw-bold">Account Status</h6>
+        <span class="badge bg-success fs-6 px-3 py-2">
+            Active
+        </span>
+    </div>
 </div>
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Phone Number</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="phone"></p>
-    </div>
-
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Department</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="department"></p>
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Designation</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="designation"></p>
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">City</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="city"></p>
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Salary</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="salary"></p>
-    </div>
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Status</h6>
-        <span id="status" class="badge bg-success fs-6 px-3 py-2"></span>
-    </div>
-
-    <div class="col-12 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Address</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary"id="address"></p>
-    </div>
-
-</div>
-
 <hr class="my-4">
 
 <div class="text-center">
@@ -204,18 +181,12 @@
             } else {
             document.getElementById("profilePhoto").src = "/static/images/default.jpg";
            }
+           document.getElementById("infoName").innerText = data.Name;
+document.getElementById("infoRole").innerText = "Administrator";
            document.getElementById("name").innerText = data.Name;
-document.getElementById("role").innerText = data.Role;
 document.getElementById("email").innerText = data.Email;
-
-document.getElementById("Emp_Id").innerText = data.Emp_Id;
-document.getElementById("phone").innerText = data.Phone_No;
-document.getElementById("city").innerText = data.City;
-document.getElementById("department").innerText = data.Department;
-document.getElementById("designation").innerText = data.Designation;
-document.getElementById("salary").innerText = "₹ " + data.Salary;
-document.getElementById("status").innerText = data.Status;
-document.getElementById("address").innerText = data.Address;
+document.getElementById("role").innerText = "Administrator";
+        
             
         })
     .catch(error => {

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee
+from .models import Employee,Admin
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model=Employee
@@ -19,3 +19,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
       if value is not None and value <= 0:
             raise serializers.ValidationError("Salary must be greater than zero")
       return value
+class AdminSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Admin
+        exclude = ["user"]

@@ -130,8 +130,7 @@ textarea.form-control{
 <div class="row g-1">
 
  
-
-<div class="col-md-6 mb-3">
+<div class="col-md-6 mb-3" id="empIdDiv">
 <label class="form-label fw-semibold">Employee ID</label>
 <input type="number"
 class="form-control"
@@ -158,7 +157,7 @@ placeholder="Enter Email Address"
 required>
 </div>
 
-<div class="col-md-6 mb-3">
+<div class="col-md-6 mb-3" id="phoneDiv">
 <label class="form-label fw-semibold">Phone Number</label>
 <input type="text"
 class="form-control"
@@ -185,7 +184,7 @@ placeholder="Confirm Password"
 required>
 </div>
 
-<div class="col-md-6 mb-3">
+<div class="col-md-6 mb-3" id="cityDiv">
 <label class="form-label fw-semibold">City</label>
 <input type="text"
 class="form-control"
@@ -193,7 +192,7 @@ name="City"
 placeholder="Enter City"
 required>
 </div>
-<div class="col-6 mb-3">
+<div class="col-6 mb-3" id="addressDiv">
     <label class="form-label fw-semibold">Address</label>
     <textarea
         class="form-control"
@@ -202,22 +201,23 @@ required>
         placeholder="Enter Address"
         required></textarea>
 </div>
-<div class="col-md-6 mb-3">
+<div class="col-md-6 mb-3" id="departmentDiv">
 <label class="form-label fw-semibold">Department</label>
 <input type="text"
 class="form-control"
 name="Department"
 placeholder="Enter Department"
+required
 >
 </div>
 
-<div class="col-md-6 mb-3">
+<div class="col-md-6 mb-3" id="designationDiv">
 <label class="form-label fw-semibold">Designation</label>
 <input type="text"
 class="form-control"
 name="Designation"
 placeholder="Enter Designation"
->
+required>
 </div>
 
 
@@ -249,6 +249,67 @@ Sign In
 <script>
 
 const form=document.getElementById("registerForm");
+const roleRadios = document.querySelectorAll('input[name="Role"]');
+
+const empIdDiv = document.getElementById("empIdDiv");
+const phoneDiv = document.getElementById("phoneDiv");
+const cityDiv = document.getElementById("cityDiv");
+const addressDiv = document.getElementById("addressDiv");
+const departmentDiv = document.getElementById("departmentDiv");
+const designationDiv = document.getElementById("designationDiv");
+function toggleFields() {
+
+    const role = document.querySelector('input[name="Role"]:checked').value;
+
+    if(role === "Admin"){
+
+        empIdDiv.style.display = "none";
+        phoneDiv.style.display = "none";
+        cityDiv.style.display = "none";
+        addressDiv.style.display = "none";
+        departmentDiv.style.display = "none";
+        designationDiv.style.display = "none";
+
+        form.Emp_Id.required = false;
+        form.Phone_No.required = false;
+        form.City.required = false;
+        form.Address.required = false;
+        form.Department.required = false;
+        form.Designation.required = false;
+
+        form.Emp_Id.value = "";
+    form.Phone_No.value = "";
+    form.City.value = "";
+    form.Address.value = "";
+    form.Department.value = "";
+    form.Designation.value = "";
+
+
+    } else {
+
+        empIdDiv.style.display = "block";
+        phoneDiv.style.display = "block";
+        cityDiv.style.display = "block";
+        addressDiv.style.display = "block";
+        departmentDiv.style.display = "block";
+        designationDiv.style.display = "block";
+
+        form.Emp_Id.required = true;
+        form.Phone_No.required = true;
+        form.City.required = true;
+        form.Address.required = true;
+        form.Department.required = true;
+        form.Designation.required = true; 
+
+    }
+
+}
+
+roleRadios.forEach(radio => {
+    radio.addEventListener("change", toggleFields);
+});
+
+toggleFields();
 
 form.addEventListener("submit",async function(event){
 
@@ -258,21 +319,22 @@ if(form.Password.value!==form.ConfirmPassword.value){
 alert("Passwords do not match");
 return;
 }
-
+const role = document.querySelector('input[name="Role"]:checked').value;
 const EmployeeData={
-
-Emp_Id:form.Emp_Id.value,
-Name:form.Name.value,
-Email:form.Email.value,
-Password:form.Password.value,
-Phone_No:form.Phone_No.value,
-City:form.City.value,
-Address:form.Address.value,
-Department:form.Department.value,
-Designation:form.Designation.value,
-Role:document.querySelector('input[name="Role"]:checked').value
-
+   Name: form.Name.value,
+    Email: form.Email.value,
+    Password: form.Password.value,
+    Role: role
 };
+if(role === "User"){
+    EmployeeData.Emp_Id = form.Emp_Id.value;
+    EmployeeData.Phone_No = form.Phone_No.value;
+    EmployeeData.City = form.City.value;
+    EmployeeData.Address = form.Address.value;
+    EmployeeData.Department = form.Department.value;
+    EmployeeData.Designation = form.Designation.value;
+}
+
 
 try{
 

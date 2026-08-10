@@ -1,5 +1,27 @@
 from django.db import models 
 from django.contrib.auth.models import User 
+class Admin(models.Model):
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    Name = models.CharField(max_length=50)
+
+    Email = models.EmailField(unique=True)
+
+    Profile_Photo = models.ImageField(
+        upload_to="admin_photos/",
+        blank=True,
+        null=True,
+        default="admin_photos/default.jpg"
+    )
+    OTP = models.CharField( max_length=6, blank=True,default="")
+    OTP_Created_At = models.DateTimeField(blank=True,null=True)
+
+    def __str__(self):
+        return self.Name
 class Employee(models.Model):
    
     Emp_Id=models.IntegerField(primary_key=True)
@@ -37,7 +59,7 @@ class Employee(models.Model):
         default="User"
     )
     Profile_Photo=models.ImageField(upload_to='profile_photos/',blank=True,null=True, default="profile_photos/default.jpg")
-    OTP=models.CharField(max_length=6,blank=True,default=True)
+    OTP=models.CharField(max_length=6,blank=True,default="")
     OTP_Created_At=models.DateTimeField(blank=True,null=True)
     
     isDeleted=models.BooleanField(default=False)

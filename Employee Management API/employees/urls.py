@@ -37,6 +37,7 @@ urlpatterns = [
     path("user-profile-page/", views.user_profile_page, name="user_profile_page"),
     path("update-profile/",views.update_profile,name="update_profile"),
     path("update-profile-page/", views.update_profile_page, name="update_profile_page"),
+    path("user-update-profile/",views.user_update_profile,name="user_update_profile"),
     path("user-update-profile-page/",views.user_update_profile_page,name="user_update_profile_page"),
     path("change-password/",views.change_password,name="change_password"),
     path("change-password-page/",views.change_password_page,name="change_password_page"),
