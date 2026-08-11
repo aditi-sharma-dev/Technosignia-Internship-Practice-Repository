@@ -36,7 +36,10 @@ def add_employee(request):
                 password=request.data["Password"]
             )
 
-            employee = serializer.save()
+            employee = serializer.save(
+                CreatedBy=admin.Name,
+                UpdatedBy=admin.Name
+            )
             employee.user = user
             employee.save()
 
@@ -90,7 +93,9 @@ def update_employee(request,Emp_Id):
         )
     serializer=EmployeeSerializer(employee,data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(
+            UpdatedBy=admin.Name
+        )
         return Response(serializer.data)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 @api_view(['DELETE'])
@@ -112,6 +117,7 @@ def delete_employee(request,Emp_Id):
         )
     employee.isDeleted=True
     employee.Status="Inactive"
+    employee.UpdatedBy=admin.Name
     employee.save()
     return Response({"message":"Employee delete successfully"},status=status.HTTP_200_OK)
 
@@ -263,7 +269,10 @@ def signup_employee(request):
                     password=request.data["Password"]
                 )
 
-                admin = serializer.save()
+                admin = serializer.save(
+                    CreatedBy=request.data.get("Name"),
+                    UpdatedBy=request.data.get("Name")
+                )
                 admin.user = user
                 admin.save()
 
@@ -288,7 +297,10 @@ def signup_employee(request):
                     password=request.data["Password"]
                 )
 
-                employee = serializer.save()
+                employee = serializer.save(
+                       CreatedBy=request.data.get("Name"),
+                       UpdatedBy=request.data.get("Name")
+                )
                 employee.user = user
                 employee.save()
 
@@ -528,7 +540,9 @@ def update_profile(request):
         )
 
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(
+                UpdatedBy=admin.Name
+            )
 
             admin.user.email = admin.Email
             admin.user.username = admin.Email
@@ -566,9 +580,12 @@ def user_update_profile(request):
 
         if serializer.is_valid():
 
-            serializer.save()
+            serializer.save(
+                UpdatedBy=employee.Name
+                
+            )
 
-            # Update Django User email/username
+            
             employee.user.email = employee.Email
             employee.user.username = employee.Email
             employee.user.save()

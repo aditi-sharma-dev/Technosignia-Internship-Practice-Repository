@@ -19,6 +19,11 @@ class Admin(models.Model):
     )
     OTP = models.CharField( max_length=6, blank=True,default="")
     OTP_Created_At = models.DateTimeField(blank=True,null=True)
+    CreatedBy=models.CharField(max_length=50,blank=True)
+    CreatedDate=models.DateTimeField(auto_now_add=True)
+    UpdatedBy=models.CharField(max_length=50,blank=True)
+    UpdatedDate=models.DateTimeField(auto_now=True)
+    
 
     def __str__(self):
         return self.Name
@@ -61,7 +66,10 @@ class Employee(models.Model):
     Profile_Photo=models.ImageField(upload_to='profile_photos/',blank=True,null=True, default="profile_photos/default.jpg")
     OTP=models.CharField(max_length=6,blank=True,default="")
     OTP_Created_At=models.DateTimeField(blank=True,null=True)
-    
+    CreatedBy=models.CharField(max_length=50,blank=True)
+    CreatedDate=models.DateTimeField(auto_now_add=True)
+    UpdatedBy=models.CharField(max_length=50,blank=True)
+    UpdatedDate=models.DateTimeField(auto_now=True)
     isDeleted=models.BooleanField(default=False)
     def __str__(self):
         return self.Name
