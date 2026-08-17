@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from rest_framework.decorators import api_view
-from.serializers import EmployeeSerializer,AdminSerializer
-from.models import Employee,Admin
+from.serializers import EmployeeSerializer,AdminSerializer,ActivityLogSerializer
+from.models import Employee,Admin,ActivityLog
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
@@ -9,13 +9,39 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from django.db import transaction
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 from django.conf import settings
 import random
+from datetime import datetime
 from django.utils import timezone
+import csv
+from django.http import HttpResponse
+
+def create_activity_log(user,action,description,request=None):
+    ip_address=None
+    if request:
+        ip_address=request.META.get("REMOTE_ADDR")
+    try:
+        Admin.objects.get(user=user)
+        role="Admin"
+    except Admin.DoesNotExist:
+        try:
+            Employee.objects.get(user=user)
+            role="User"
+        except Employee.DoesNotExist:
+            role="User"
+    
+    ActivityLog.objects.create(
+        user=user,
+        role=role,
+        action=action,
+        description=description,
+        ip_address=ip_address
+    )
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_employee(request):
@@ -42,6 +68,13 @@ def add_employee(request):
             )
             employee.user = user
             employee.save()
+            
+            create_activity_log(
+                request.user,
+                "Create",
+                 f"Employee {employee.Name} created successfully",
+                 request
+                 )
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -96,6 +129,14 @@ def update_employee(request,Emp_Id):
         serializer.save(
             UpdatedBy=admin.Name
         )
+        
+        create_activity_log(
+        request.user,
+        "Update",
+        f"Employee {employee.Name} updated successfully",
+        request
+    )
+
         return Response(serializer.data)
     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 @api_view(['DELETE'])
@@ -119,6 +160,15 @@ def delete_employee(request,Emp_Id):
     employee.Status="Inactive"
     employee.UpdatedBy=admin.Name
     employee.save()
+    
+    create_activity_log(
+                    request.user,
+                    "Delete",
+                     f"Employee {employee.Name} deleted successfully",
+                     request
+                     )
+   
+
     return Response({"message":"Employee delete successfully"},status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -275,6 +325,13 @@ def signup_employee(request):
                 )
                 admin.user = user
                 admin.save()
+                
+                create_activity_log(
+                          user,
+                          "Registration",
+                          "Admin registered successfully",
+                           request
+                            )
 
             return Response(
                 {"message": "Admin Registered Successfully"},
@@ -303,6 +360,14 @@ def signup_employee(request):
                 )
                 employee.user = user
                 employee.save()
+                 
+                   
+                create_activity_log(
+                                  user,
+                                  "Registration",
+                                  "Employee registered successfully",
+                                    request
+                                  )
 
             return Response(
                 {"message": "Employee Registered Successfully"},
@@ -358,6 +423,13 @@ def login_employee(request):
             request.session["admin_id"] = admin.id
             request.session["admin_name"] = admin.Name
             request.session["role"] = "Admin"
+            
+            create_activity_log(
+                user,
+                "Login",
+                "Admin logged in successfully",
+                request
+            )
 
             return Response({
                 "message": "Login Successful",
@@ -389,7 +461,13 @@ def login_employee(request):
             request.session["employee_id"] = employee.Emp_Id
             request.session["employee_name"] = employee.Name
             request.session["role"] = "User"
-
+   
+            create_activity_log(
+                             user,
+                             "Login",
+                             "Employee logged in successfully",
+                             request
+                         )
             return Response({
                 "message": "Login Successful",
                 "role": "User",
@@ -404,7 +482,17 @@ def login_employee(request):
                 status=status.HTTP_404_NOT_FOUND
             )
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def logout_employee(request):
+    user=request.user
+    role=request.session.get("role")
+    create_activity_log(
+        user,
+        "Logout",
+        f"{role} logged out successfully",
+        request
+    )
+
     request.session.flush()
     return Response({"message":"Logout Successfull"},status=status.HTTP_200_OK)
 
@@ -547,6 +635,13 @@ def update_profile(request):
             admin.user.email = admin.Email
             admin.user.username = admin.Email
             admin.user.save()
+            
+            create_activity_log(
+             request.user,
+             "Update",
+             "Admin profile updated successfully",
+              request
+              )
 
             return Response(serializer.data)
 
@@ -589,6 +684,13 @@ def user_update_profile(request):
             employee.user.email = employee.Email
             employee.user.username = employee.Email
             employee.user.save()
+            
+            create_activity_log(
+             request.user,
+            "Update",
+            "Employee profile updated successfully",
+             request
+              )
 
             return Response(
                 serializer.data,
@@ -622,6 +724,13 @@ def change_password(request):
 )
     user.set_password(new_password)
     user.save()
+    create_activity_log(
+    user,
+    "Password Change",
+    "Password changed successfully",
+    request
+)
+
     return Response(
         {"message": "Password changed successfully"},
         status=status.HTTP_200_OK
@@ -780,6 +889,13 @@ def reset_password(request):
 
         admin.OTP = ""
         admin.save()
+        
+        create_activity_log(
+           user,
+            "Password Change",
+            "Password reset successfully",
+             request
+            )
 
         return Response(
             {"message": "Password reset successfully"},
@@ -796,6 +912,13 @@ def reset_password(request):
         user = employee.user
         user.set_password(new_password)
         user.save()
+        
+        create_activity_log(
+             user,
+            "Password Change",
+             "Password reset successfully",
+              request
+               )
 
         employee.OTP = ""
         employee.save()
@@ -816,3 +939,151 @@ def verify_otp_page(request):
 
 def reset_password_page(request):
     return render(request, "reset_password.html")
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def activity_logs(request):
+    try:
+        try:
+            
+          Admin.objects.get(user=request.user)
+          is_Admin=True
+        except Admin.DoesNotExist:
+            is_Admin=False
+        if is_Admin:
+            logs=ActivityLog.objects.all()
+        else:
+             logs=ActivityLog.objects.filter(user=request.user)
+        search=request.GET.get("search")
+        if search:
+            logs=logs.filter(
+                Q(user__admin__Name__icontains=search)|
+                Q(user__employee__Name__icontains=search)|
+                Q(description__icontains=search)
+            )
+        action=request.GET.get("action")
+        if action:
+            valid_actions=[
+                                "Registration",
+                                "Login",
+                                "Logout",
+                                "Create",
+                                "Update",
+                                "Delete",
+                                "Password Change"
+            ]
+            if action not in valid_actions:
+                return Response({"message":"Invalid action"},status=status.HTTP_400_BAD_REQUEST)
+            logs=logs.filter(action=action)
+        role=request.GET.get("role")
+        if role:
+            valid_roles=[
+                "Admin",
+                "User"
+            ]
+            if role not in valid_roles:
+                  return Response({"message": "Invalid role"},status=status.HTTP_400_BAD_REQUEST)
+
+            logs = logs.filter(role=role)
+        date=request.GET.get("date")
+        if date:
+            try:
+                datetime.strptime(date,"%Y-%m-%d")
+            except ValueError:
+                return Response({"message":"Invalid date format. Use %Y-%m-%d"},status=status.HTTP_400_BAD_REQUEST)
+            logs=logs.filter(timestamp__date=date)
+        logs=logs.order_by("-timestamp")
+        paginator=PageNumberPagination()
+        paginator.page_size=10
+        result=paginator.paginate_queryset(logs,request)
+        serializer=ActivityLogSerializer(result,many=True)
+        return paginator.get_paginated_response(serializer.data)
+    except Exception:
+        return Response({"message":"Unable to fetch activity logs"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+def activity_logs_page(request):
+    return render(request, "activity_logs.html")
+def user_activity_logs_page(request):
+    return render(request, "user_activity_logs.html")
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def export_activity_logs(request):
+    try:
+        try:
+            Admin.objects.get(user=request.user)
+            is_admin=True
+        except Admin.DoesNotExist:
+            is_admin=False
+        if is_admin:
+            logs=ActivityLog.objects.all()
+        else:
+            logs=ActivityLog.objects.filter(user=request.user)
+        search=request.GET.get('search')
+        if search:
+            logs=logs.filter(
+                Q(user__admin__Name__icontains=search)|
+                Q(user__employee__Name__icontains=search)|
+                Q(description__icontains=search)
+            )
+        action=request.GET.get('action')
+        if action:
+            
+            valid_actions = [
+                "Registration",
+                "Login",
+                "Logout",
+                "Create",
+                "Update",
+                "Delete",
+                "Password Change"
+            ]
+            if action not in valid_actions:
+                return Response({"message":"Invalid Action"},status=status.HTTP_400_BAD_REQUEST)
+            logs=logs.filter(action=action)
+        role=request.GET.get('role')
+        if role:
+            valid_roles=[
+                "Admin",
+                "User"
+            ]
+            if role not in valid_roles:
+                return Response({"message":"Invalid Role"},status=status.HTTP_400_BAD_REQUEST)
+            logs=logs.filter(role=role)
+        date=request.GET.get('date')
+        if date:
+            try:
+                datetime.strptime(date,"%Y-%m-%d")
+            except ValueError:
+                return Response({"message":"Invalid date format.Use %Y-%m-%d"},status=status.HTTP_400_BAD_REQUEST)
+            logs=logs.filter(timestamp__date=date)
+            
+        logs=logs.order_by("-timestamp")
+        
+        #Create CSV Response
+        response=HttpResponse(content_type="text/csv")
+        response["Content-Disposition"]=('attachment; filename="activity_logs.csv"')
+        
+        writer=csv.writer(response)
+        writer.writerow([
+            "User",
+            "Role",
+            "Action",
+            "Description",
+            "Ip_Address",
+            "Created_Date"
+        ])
+        for log in logs:
+            serializer=ActivityLogSerializer(log)
+            data=serializer.data
+            writer.writerow([
+                data["user"],
+                data["role"],
+                data["action"],
+                data["description"],
+                data["ip_address"],
+                data["timestamp"]
+            ])
+        return response
+    except Exception:
+        return Response({"message":"Unable to export activity_logs"},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

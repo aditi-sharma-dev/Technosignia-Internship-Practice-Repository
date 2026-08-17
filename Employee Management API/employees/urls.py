@@ -48,4 +48,8 @@ urlpatterns = [
     path("verify-otp-page/", views.verify_otp_page, name="verify_otp_page"),
     path("reset-password/", views.reset_password, name="reset_password"),
     path("reset-password-page/", views.reset_password_page, name="reset_password_page"),
+    path("activity-logs/",views.activity_logs,name="activity_logs"),
+    path("activity-logs-page/",views.activity_logs_page,name="activity_logs_page"),
+    path('user-activity-logs/',views.user_activity_logs_page,name='user_activity_logs_page'),
+    path("export-activity-logs/", views.export_activity_logs, name="export_activity_logs"),
 ]

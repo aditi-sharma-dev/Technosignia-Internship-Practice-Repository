@@ -1,5 +1,5 @@
 from django.contrib import admin
-from.models import Employee, Admin
+from.models import Employee, Admin,ActivityLog
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
     list_display=("Emp_Id",
@@ -36,3 +36,9 @@ class AdminAdmin(admin.ModelAdmin):
                       )
     
 
+@admin.register(ActivityLog)
+class ActivityLogAdmin(admin.ModelAdmin):
+    list_display=("user","role","action","description","timestamp","ip_address")
+    list_filter=("action","role","timestamp")
+    search_fields=("description","user__username","role","user__email")
+    ordering=("-timestamp",)
