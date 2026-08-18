@@ -1,226 +1,430 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+{% extends "user_base.html" %}
+{% load static %}
 
-    <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-      <style>
-      body{
-       background:#eef5fb;
-       font-family:Arial,sans-serif;
-     }
 
-   .sidebar{
-       background:#173d63;
-       min-height:100vh;
-     }
+{% block title %}
+Profile
+{% endblock %}
 
-    .sidebar .nav-link{
-       color:white;
-       padding:12px 15px;
-       border-radius:12px;
-       margin-bottom:10px;
-       transition:.3s;
-     }
 
-   .sidebar .nav-link:hover{
-      background:#2c5f94;
-     }
+{% block user_profile_active %}
+active
+{% endblock %}
 
-   .sidebar .active{
-      background:#0d6efd;
-    }
-    .card{
-    border: none;
-    border-radius: 20px;
-}
-</style>
-</head>
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-2 col-md-4 sidebar text-white p-4">
-                <h3 class="fw-bold text-center mb-4">
-                    <i class="bi bi-buildings-fill"></i>
-                    EMS
-                </h3>
-                <hr>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{% url 'user_dashboard' %}" class="nav-link ">
-                            <i class="bi bi-speedometer2 me-2"></i>
-                            Dashboard
-                        </a>
 
-                    </li>
-                
-                
-                    <li class="nav-item">
-                        <a href="{% url 'user_profile_page' %}" class="nav-link active">
-                       <i class="bi bi-person-circle me-2"></i>
-                        My Profile
-                    </a>
-                    </li>
-                    <li class="nav-item">
+{% block content %}
 
-            <a href="{% url 'user_activity_logs_page' %}"
-               class="nav-link ">
 
-                <i class="bi bi-clock-history me-2"></i>
+<!-- ================= HEADER ================= -->
 
-                Activity Logs
+<div class="d-flex justify-content-between align-items-center bg-white shadow-sm px-4 py-3">
 
-            </a>
+    <div>
 
-        </li>
+        <h2 class="fw-bold mb-0">
+            Profile
+        </h2>
 
-                       
-                    <li class="nav-item mt-5">
-                        <a href="#" id="logoutBtn" class="nav-link text-warning">
-                            <i class="bi bi-box-arrow-right me-2"></i>
-                            Logout
-                        </a>
-                    </li>
-                </ul>
-            </div>
-    <div class="col-lg-10 col-md-8">
-        
-        <div class="d-flex justify-content-between align-items-center  bg-white shadow-sm px-4 py-3">
-            <div>
-                <h2 class="fw-bold mb-0">Profile</h2>
-                <p class="text-primary fw-semibold mb-0 mt-1">Employee Management System</p>
-            </div>
-        </div>
-  <div class="card shadow-lg p-4 mt-3">
+        <p class="text-primary fw-semibold mb-0 mt-1">
+            Employee Management System
+        </p>
+
+    </div>
+
+</div>
+
+
+
+<!-- ================= PROFILE CARD ================= -->
+
+<div class="card shadow-lg p-4 mt-3">
+
+
+    <!-- PROFILE PHOTO -->
+
     <div class="text-center mb-4">
 
-    <img id="profilePhoto"
-         src="/static/images/default.jpg"
-         class="rounded-circle border border-3 border-primary shadow"
-         width="130"
-         height="130">
+       <img id="profilePhoto" 
+     src="{% static 'images/default.jpg' %}"
+     class="rounded-circle border border-3 border-primary shadow"
+     width="130"
+     height="130"
+     style="object-fit: cover;">
 
-    <h2 class="fw-bold mt-2 mb-1" id="name"></h2>
+        <h2 class="fw-bold mt-2 mb-1"
+            id="name">
+        </h2>
 
-    <span class="badge bg-primary px-4 py-2 fs-6"
-          id="role">
-    </span>
+        <span class="badge bg-primary px-4 py-2 fs-6"
+              id="role">
+        </span>
+
+    </div>
+
+
+    <hr class="my-4">
+
+
+    <!-- ================= EMPLOYEE INFORMATION ================= -->
+
+    <h4 class="fw-bold text-primary mb-3">
+
+        Employee Information
+
+    </h4>
+
+
+    <div class="row">
+
+
+        <!-- EMPLOYEE ID -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Employee ID
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="Emp_Id">
+            </p>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Email
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="email">
+            </p>
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Phone Number
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="phone">
+            </p>
+
+        </div>
+
+
+        <!-- DEPARTMENT -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Department
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="department">
+            </p>
+
+        </div>
+
+
+        <!-- DESIGNATION -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Designation
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="designation">
+            </p>
+
+        </div>
+
+
+        <!-- CITY -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                City
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="city">
+            </p>
+
+        </div>
+
+
+        <!-- SALARY -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Salary
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="salary">
+            </p>
+
+        </div>
+
+
+        <!-- STATUS -->
+
+        <div class="col-md-6 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Status
+            </h6>
+
+            <span id="status"
+                  class="badge bg-success fs-6 px-3 py-2">
+            </span>
+
+        </div>
+
+
+        <!-- ADDRESS -->
+
+        <div class="col-12 mb-3">
+
+            <h6 class="fw-bold text-dark mb-1">
+                Address
+            </h6>
+
+            <p class="fs-5 fw-normal mb-0 text-secondary"
+               id="address">
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <hr class="my-4">
+
+
+    <!-- ================= BUTTONS ================= -->
+
+    <div class="text-center">
+
+        <a href="/employees/user-update-profile-page/"
+           class="btn btn-primary px-4 me-3">
+
+            <i class="bi bi-pencil-square me-2"></i>
+
+            Update Profile
+
+        </a>
+
+
+        <a href="/employees/user-change-password-page/"
+           class="btn btn-warning px-4">
+
+            <i class="bi bi-key-fill me-2"></i>
+
+            Change Password
+
+        </a>
+
+    </div>
 
 </div>
 
-<hr class="my-4">
 
-<h4 class="fw-bold text-primary mb-3">
-    Employee Information
-</h4>
-<div class="row">
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Employee ID</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="Emp_Id"></p>
-    </div>
-    <div class="col-md-6 mb-3">
-    <h6 class="fw-bold text-dark mb-1">Email</h6>
-    <p class="fs-5 fw-normal mb-0 text-secondary" id="email"></p>
-</div>
-
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Phone Number</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="phone"></p>
-    </div>
+{% endblock %}
 
 
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Department</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="department"></p>
-    </div>
 
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Designation</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="designation"></p>
-    </div>
+{% block extra_js %}
 
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">City</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="city"></p>
-    </div>
+<script>
 
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Salary</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary" id="salary"></p>
-    </div>
+async function loadProfile() {
 
-    <div class="col-md-6 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Status</h6>
-        <span id="status" class="badge bg-success fs-6 px-3 py-2"></span>
-    </div>
-
-    <div class="col-12 mb-3">
-        <h6 class="fw-bold text-dark mb-1">Address</h6>
-        <p class="fs-5 fw-normal mb-0 text-secondary"id="address"></p>
-    </div>
-
-</div>
-
-            <hr class="my-4">
-
-<div class="text-center">
-                <a href="/employees/user-update-profile-page/"
-   class="btn btn-primary px-4 me-3">
-    <i class="bi bi-pencil-square me-2"></i>
-    Update Profile
-</a>
-
-<a href="/employees/user-change-password-page/"
-   class="btn btn-warning px-4">
-    <i class="bi bi-key-fill me-2"></i>
-    Change Password
-</a>
+    const token =
+        localStorage.getItem("access");
 
 
-</div>
- </div>
-</div>
+    if (!token) {
 
-    <script>
-        const token=localStorage.getItem("access");
-        fetch("/employees/profile/",{
-            "method": "GET",
-            "headers":{
-                Authorization:`Bearer ${token}`
-}  
+        return;
+
+    }
 
 
-})
-        .then(response=>response.json())
-        .then(data=>{
-            
-            if (data.Profile_Photo) {
-    document.getElementById("profilePhoto").src = data.Profile_Photo;
-} else {
-    document.getElementById("profilePhoto").src = "/static/images/default.jpg";
+    try {
+
+        const response = await fetch(
+            "/employees/profile/",
+            {
+                method: "GET",
+
+                headers: {
+                    "Authorization":
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            alert(
+                data.message ||
+                "Unable to load profile."
+            );
+
+            return;
+
+        }
+
+
+        // ================= PROFILE PHOTO =================
+
+       const profilePhoto = document.getElementById("profilePhoto");
+        if (data.Profile_Photo) {
+             profilePhoto.src = data.Profile_Photo;
+             profilePhoto.onerror = function () 
+             {
+                 this.src = "{% static 'images/default.jpg' %}";
+                 };
+                 } else {
+                     profilePhoto.src = "{% static 'images/default.jpg' %}";
+                     }
+
+
+        // ================= NAME =================
+
+        document.getElementById(
+            "name"
+        ).innerText = data.Name || "-";
+
+
+        // ================= ROLE =================
+
+        document.getElementById(
+            "role"
+        ).innerText = data.Role || "-";
+
+
+        // ================= EMPLOYEE ID =================
+
+        document.getElementById(
+            "Emp_Id"
+        ).innerText = data.Emp_Id || "-";
+
+
+        // ================= EMAIL =================
+
+        document.getElementById(
+            "email"
+        ).innerText = data.Email || "-";
+
+
+        // ================= PHONE =================
+
+        document.getElementById(
+            "phone"
+        ).innerText = data.Phone_No || "-";
+
+
+        // ================= CITY =================
+
+        document.getElementById(
+            "city"
+        ).innerText = data.City || "-";
+
+
+        // ================= DEPARTMENT =================
+
+        document.getElementById(
+            "department"
+        ).innerText = data.Department || "-";
+
+
+        // ================= DESIGNATION =================
+
+        document.getElementById(
+            "designation"
+        ).innerText = data.Designation || "-";
+
+
+        // ================= SALARY =================
+
+        document.getElementById(
+            "salary"
+        ).innerText =
+            data.Salary != null
+                ? "Rs " + data.Salary
+                : "-";
+
+
+        // ================= STATUS =================
+
+        const status =
+            document.getElementById("status");
+
+        status.innerText =
+            data.Status || "-";
+
+
+        if (data.Status === "Active") {
+
+            status.className =
+                "badge bg-success fs-6 px-3 py-2";
+
+        }
+
+        else {
+
+            status.className =
+                "badge bg-danger fs-6 px-3 py-2";
+
+        }
+
+
+        // ================= ADDRESS =================
+
+        document.getElementById(
+            "address"
+        ).innerText = data.Address || "-";
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Failed to load profile."
+        );
+
+    }
+
 }
-            document.getElementById("name").innerText = data.Name;
-document.getElementById("role").innerText = data.Role;
-           document.getElementById("Emp_Id").innerText = data.Emp_Id;
-document.getElementById("email").innerText = data.Email;
-document.getElementById("phone").innerText = data.Phone_No;
-document.getElementById("city").innerText = data.City;
-document.getElementById("department").innerText = data.Department;
-document.getElementById("designation").innerText = data.Designation;
-document.getElementById("salary").innerText = "Rs " + data.Salary;
-document.getElementById("status").innerText = data.Status;
-document.getElementById("address").innerText = data.Address;
-        })
-    .catch(error => {
-    console.error(error);
-    alert("Failed to load profile.");
-});
-        </script>
-   
-</body>
-</html>
+
+
+loadProfile();
+
+</script>
+
+{% endblock %}
